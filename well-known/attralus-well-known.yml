@@ -2,46 +2,12 @@ generated: '2026-08-02'
 method: probed
 source: https://attralus.com/
 host: https://attralus.com
-notes: >-
-  Attralus publishes no /.well-known/ discovery surface. Every RFC 8615 path probed
-  returns 404 (the WordPress theme answers with its own HTML 404 page, so bodies are
-  HTML, not documents), as does every REST/GraphQL contract path probed on the same
-  host. No api/developer/docs/status/trust subdomain resolves in DNS. robots.txt and
-  the WordPress sitemap/RSS feed are the only machine-readable surfaces on the domain.
-  Recorded as a negative probe result: no WellKnown pointer is wired in apis.yml
-  because no /.well-known/ document exists.
-documents:
-- path: /.well-known/security.txt
-  status: 404
-- path: /.well-known/openid-configuration
-  status: 404
-- path: /.well-known/oauth-authorization-server
-  status: 404
-- path: /.well-known/oauth-protected-resource
-  status: 404
-- path: /.well-known/api-catalog
-  status: 404
-- path: /.well-known/ai-plugin.json
-  status: 404
-- path: /.well-known/agent-card.json
-  status: 404
-- path: /.well-known/agent.json
-  status: 404
-- path: /llms.txt
-  status: 404
-- path: /robots.txt
-  status: 200
-  content_type: text/plain
-  note: 'WordPress default: Disallow /wp-admin/, plus a non-standard Disallow *.pdf$;
-    no AI-crawler directives either way.'
-- path: /sitemap.xml
-  status: 200
-  content_type: text/xml
-  note: redirects to /sitemap_index.xml (Yoast/AIOSEO style index)
-- path: /feed/
-  status: 200
-  content_type: application/rss+xml
-  note: site-wide WordPress RSS carrying press releases + posters/publications
+notes: 'Attralus publishes no /.well-known/ discovery surface. Every RFC 8615 path probed returns 404
+  (the WordPress theme answers with its own HTML 404 page, so bodies are HTML, not documents), as does
+  every REST/GraphQL contract path probed on the same host. No api/developer/docs/status/trust subdomain
+  resolves in DNS. robots.txt and the WordPress sitemap/RSS feed are the only machine-readable surfaces
+  on the domain. Recorded as a negative probe result: no WellKnown pointer is wired in apis.yml because
+  no /.well-known/ document exists.'
 contracts_probed:
 - path: /openapi.json
   status: 404
@@ -85,3 +51,27 @@ registries_probed:
 x-evidence:
   fetched: '2026-08-02'
   method: curl GET with redirects, dig for subdomain resolution, registry HTTP probes
+hosts:
+- host: https://attralus.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+x-shape-fix:
+  converted: '2026-08-20'
+  from: documents
+  note: Rewritten into hosts[] -> documents[], the only shape well_known_docs() in score.rb reads. A served
+    .well-known surface recorded in any other shape scores as absent.
